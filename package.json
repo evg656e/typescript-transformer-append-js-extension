@@ -1,8 +1,11 @@
 {
-	"name": "@zoltu/typescript-transformer-append-js-extension",
+	"name": "@evg656e/typescript-transformer-append-js-extension",
 	"description": "A TypeScript transformer for use with ttypescript that will append the JS extension to all relative imports that have no extension.",
-	"version": "1.0.1",
-	"repository": {},
+	"version": "1.0.2",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/evg656e/typescript-transformer-append-js-extension.git"
+	},
 	"license": "Unlicense",
 	"main": "output/index.js",
 	"devDependencies": {
