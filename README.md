@@ -11,7 +11,7 @@ The hope is that eventually TypeScript will [add support for appending the `.js`
 	```
 	npm install --save-dev typescript
 	npm install --save-dev ttypescript
-	npm install --save-dev @zoltu/typescript-transformer-append-js-extension
+	npm install --save-dev @evg656e/typescript-transformer-append-js-extension
 	```
 1. Add the transformer to your es2015 module `tsconfig-es.json` (or whatever `tsconfig.json` you are using to build es2015 modules)
 	```json
@@ -21,7 +21,7 @@ The hope is that eventually TypeScript will [add support for appending the `.js`
 			"module": "es2015",
 			"plugins": [
 				{
-					"transform": "@zoltu/typescript-transformer-append-js-extension/output/index.js",
+					"transform": "@evg656e/typescript-transformer-append-js-extension/output/index.js",
 					"after": true,
 				}
 			]
@@ -41,4 +41,49 @@ The hope is that eventually TypeScript will [add support for appending the `.js`
 1. Compile using `ttsc`
 	```
 	npx ttsc --project tsconfig-es.json
+	```
+
+# Configuration
+
+By default, only relative paths are transformed. You can force the transformation of absolute paths using `forceInclude` option, which accepts an array of strings of RegExp patterns, e.g.:
+
+	```json
+	// tsconfig-es.json
+	{
+		"compilerOptions": {
+			"module": "es2015",
+			"plugins": [
+				{
+					"transform": "@evg656e/typescript-transformer-append-js-extension/output/index.js",
+					"after": true,
+					"forceInclude": [
+						"^lodash/.*"
+					],
+				}
+			]
+		},
+	}
+	```
+
+Additionaly you can specify `forceExclude` option, which specifies paths that should be skipped when resolving `forceInclude` option:
+
+	```json
+	// tsconfig-es.json
+	{
+		"compilerOptions": {
+			"module": "es2015",
+			"plugins": [
+				{
+					"transform": "@evg656e/typescript-transformer-append-js-extension/output/index.js",
+					"after": true,
+					"forceInclude": [
+						"^lodash/.*"
+					],
+					"forceExclude": [
+						"^lodash/isRegExp$"
+					]
+				}
+			]
+		},
+	}
 	```

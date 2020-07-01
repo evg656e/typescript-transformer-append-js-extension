@@ -15,7 +15,16 @@
 		"esModuleInterop": true,
 		"lib": [ "es2019" ],
 		"plugins": [
-			{ "transform": "../source/index.ts", "after": true }
+			{
+				"transform": "../source/index.ts",
+				"after": true,
+				"forceInclude": [
+					"^lodash/.*"
+				],
+				"forceExclude": [
+					"^lodash/isRegExp$"
+				]
+			}
 		]
 	},
 	"include": [
