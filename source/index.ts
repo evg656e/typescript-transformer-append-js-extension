@@ -4,12 +4,13 @@ import * as path from 'path'
 const transformer = (_: typescript.Program) => (transformationContext: typescript.TransformationContext) => (sourceFile: typescript.SourceFile) => {
 	function visitNode(node: typescript.Node): typescript.VisitResult<typescript.Node> {
 		if (shouldMutateModuleSpecifier(node)) {
-			if (typescript.isImportDeclaration(node)) {
-				const newModuleSpecifier = typescript.createLiteral(`${node.moduleSpecifier.text}.js`)
-				return typescript.updateImportDeclaration(node, node.decorators, node.modifiers, node.importClause, newModuleSpecifier)
-			} else if (typescript.isExportDeclaration(node)) {
-				const newModuleSpecifier = typescript.createLiteral(`${node.moduleSpecifier.text}.js`)
-				return typescript.updateExportDeclaration(node, node.decorators, node.modifiers, node.exportClause, newModuleSpecifier)
+			if (typescript.isImportDeclaration(node)
+				|| typescript.isExportDeclaration(node)) {
+				const newModuleSpecifier = typescript.createStringLiteral(`${node.moduleSpecifier.text}.js`) as typescript.StringLiteral & { singleQuote: boolean };
+				newModuleSpecifier.singleQuote = node.moduleSpecifier.getText(sourceFile)[0] === '\'';
+				const newNode = typescript.getMutableClone(node)
+				newNode.moduleSpecifier = newModuleSpecifier
+				return newNode
 			}
 		}
 
