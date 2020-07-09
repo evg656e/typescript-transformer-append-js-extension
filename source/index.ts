@@ -12,14 +12,11 @@ const transformer = (_: typescript.Program, config: AppendJSExtensionConfig) => 
 
 	function visitNode(node: typescript.Node): typescript.VisitResult<typescript.Node> {
 		if (shouldMutateModuleSpecifier(node)) {
-			if (typescript.isImportDeclaration(node)
-				|| typescript.isExportDeclaration(node)) {
-				const newModuleSpecifier = typescript.createStringLiteral(`${node.moduleSpecifier.text}.js`) as typescript.StringLiteral & { singleQuote: boolean };
-				newModuleSpecifier.singleQuote = node.moduleSpecifier.getText(sourceFile)[0] === '\'';
-				const newNode = typescript.getMutableClone(node)
-				newNode.moduleSpecifier = newModuleSpecifier
-				return newNode
-			}
+			const newModuleSpecifier = typescript.createStringLiteral(`${node.moduleSpecifier.text}.js`) as typescript.StringLiteral & { singleQuote: boolean };
+			newModuleSpecifier.singleQuote = node.moduleSpecifier.getText(sourceFile)[0] === '\'';
+			const newNode = typescript.getMutableClone(node)
+			newNode.moduleSpecifier = newModuleSpecifier
+			return newNode
 		}
 
 		return typescript.visitEachChild(node, visitNode, transformationContext)
